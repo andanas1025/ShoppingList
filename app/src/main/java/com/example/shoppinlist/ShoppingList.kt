@@ -12,8 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,6 +74,9 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                             .padding(8.dp),
                         horizontalArrangement = Arrangement.Absolute.SpaceBetween
                     ) {
+                        Button(onClick = { showDialog = false }) {
+                            Text("Cancel")
+                        }
                         Button(onClick = {
                             if (itemName.isNotBlank()) {
                                 val newItem = ShoppingItem(
@@ -79,12 +87,10 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                                 sItems = sItems + newItem
                                 showDialog = false
                                 itemName = ""
+                                quantity = ""
                             }
                         }) {
                             Text("Add")
-                        }
-                        Button(onClick = { showDialog = false }) {
-                            Text("Cancel")
                         }
                     }
                 },
@@ -94,6 +100,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                         OutlinedTextField(
                             value = itemName,
                             onValueChange = { itemName = it },
+                            label = { Text("Item name") },
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -102,6 +109,7 @@ fun ShoppingListApp(modifier: Modifier = Modifier) {
                         OutlinedTextField(
                             value = quantity,
                             onValueChange = { quantity = it },
+                            label = { Text("Item Quantity") },
                             singleLine = true,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -130,5 +138,14 @@ fun ShoppingListItem(
             )
     ) {
         Text(text = item.name, modifier = Modifier.padding(8.dp))
+        Text(text = "Qty: ${item.quantity}", modifier = Modifier.padding(8.dp))
+        Row(modifier = Modifier.padding(8.dp)) {
+            IconButton(onClick = onEdit) {
+                Icon(imageVector = Icons.Default.Edit, contentDescription = null)
+            }
+            IconButton(onClick = onDelete) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = null)
+            }
+        }
     }
 }
